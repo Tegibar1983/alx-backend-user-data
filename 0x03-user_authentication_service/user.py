@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" ORM User Class """
+"""Class User for ORM"""
 
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
