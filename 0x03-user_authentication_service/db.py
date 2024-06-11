@@ -9,7 +9,6 @@ from sqlalchemy.orm.exc import NoResultFound
 from typing import TypeVar
 from user import Base, User
 
-
 class DB:
 
         """ DB Class for Object Reational Mapping 
@@ -21,7 +20,6 @@ class DB:
                     Base.metadata.drop_all(self._engine)
                     Base.metadata.create_all(self._engine)
                     self.__session = None
-
 
         @property
         def _session(self):
