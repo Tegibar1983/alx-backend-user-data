@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-""" Database for ORM """
+""" Database for ORM 
+"""
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -11,9 +12,11 @@ from user import Base, User
 
 class DB:
 
-        """ DB Class for Object Reational Mapping """
+        """ DB Class for Object Reational Mapping 
+        """
         def __init__(self):
-                    """ Constructor Method """
+                    """ Constructor Method 
+                    """
                     self._engine = create_engine("sqlite:///a.db", echo=False)
                     Base.metadata.drop_all(self._engine)
                     Base.metadata.create_all(self._engine)
@@ -22,7 +25,8 @@ class DB:
 
         @property
         def _session(self):
-                    """ Session Getter Method """
+                    """ Session Getter Method 
+                    """
                     if self.__session is None:
                         DBSession = sessionmaker(bind=self._engine)
                         self.__session = DBSession()
@@ -41,8 +45,7 @@ class DB:
 
 
         def find_user_by(self, **kwargs) -> User:
-            """ Finds user by key word args
-        Return: First row found in the users table as filtered by kwargs
+            """ Finds user by key word args Return: First row found in the users table as filtered by kwargs
             """
             if not kwargs:
                 raise InvalidRequestError
@@ -58,8 +61,7 @@ class DB:
             return user
 
         def update_user(self, user_id: int, **kwargs) -> None:
-            """ Update users attributes
-        Returns: None
+            """ Update users attribute Returns: None
             """
             user = self.find_user_by(id=user_id)
             column_names = User.__table__.columns.keys()
