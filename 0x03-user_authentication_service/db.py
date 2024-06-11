@@ -32,7 +32,6 @@ class DB:
                         self.__session = DBSession()
                     return self.__session
 
-
         def add_user(self, email: str, hashed_password: str) -> User:
             """ Adds user to database
         Return: User Object 
@@ -42,7 +41,6 @@ class DB:
             self._session.commit()
 
             return user
-
 
         def find_user_by(self, **kwargs) -> User:
             """ Finds user by key word args Return: First row found in the users table as filtered by kwargs
