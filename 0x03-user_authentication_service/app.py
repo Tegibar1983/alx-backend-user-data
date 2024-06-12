@@ -64,14 +64,19 @@ def log_out() -> str:
     If the user exists destroy the session and redirect the user to GET /.
     If the user does not exist, respond with a 403 HTTP status.
     """
-
     session_id = request.cookies.get("session_id", None)
+
     if session_id is None:
         abort(403)
 
-    AUTH.destroy_session(user_id)
-    return redirect('/')
+    user = AUTH.get_user_from_session_id(session_id)
 
+    if user is None:
+        abort(403)
+
+    AUTH.destroy_session(user.id)
+
+    return redirect('/')
 
 
 @app.route('/profile', methods=['GET'])
@@ -79,18 +84,19 @@ def profile() -> str:
     """ If the user exist, respond with a 200 HTTP status and a JSON Payload
     Otherwise respond with a 403 HTTP status.
     """
+    session_id = request.cookies.get("session_id", None)
 
-    session_id = request.cookies.get('session_id', None)
     if session_id is None:
         abort(403)
 
     user = AUTH.get_user_from_session_id(session_id)
+
     if user is None:
         abort(403)
 
-    msg = {'email': user.email}
-    return jsonify(msg), 200
+    msg = {"email": user.email}
 
+    return jsonify(msg), 200
 
 
 @app.route('/reset_password', methods=['POST'])
@@ -99,7 +105,6 @@ def reset_password() -> str:
     Otherwise, generate a token and respond with a
     200 HTTP status and JSON Payload
     """
-
     try:
         email = request.form['email']
     except KeyError:
@@ -110,7 +115,8 @@ def reset_password() -> str:
     except ValueError:
         abort(403)
 
-    msg = {'email': email, 'reset_token': reset_token}
+    msg = {"email": email, "reset_token": reset_token}
+
     return jsonify(msg), 200
 
 
@@ -123,7 +129,6 @@ def update_password() -> str:
         - 403 if not valid reset token
         - 200 and JSON Payload if valid
     """
-
     try:
         email = request.form['email']
         reset_token = request.form['reset_token']
@@ -136,10 +141,9 @@ def update_password() -> str:
     except ValueError:
         abort(403)
 
-
-    msg = {'email': email, 'message': 'password updated'}
+    msg = {"email": email, "message": "Password updated"}
     return jsonify(msg), 200
 
 
-if __name__ == __main__:
-    app.run(host="0.0.0.0", port="5000"
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port="5000")
